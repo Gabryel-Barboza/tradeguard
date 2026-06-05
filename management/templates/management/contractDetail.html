@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'list-contracts' %}" class="btn btn-secondary" style="margin-bottom: 1.5rem;">← Voltar para Lista</a>
+
+<div class="card">
+  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+    <h1 style="margin: 0;">Contrato: {{ contract.contract_number }}</h1>
+    <span class="status-badge" style="font-size: 1rem; padding: 0.5rem 1rem;">{{ contract.get_status_display }}</span>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-item">
+      <label>Fornecedor</label>
+      <span>{{ contract.supplier.corporate_name }}</span>
+    </div>
+    <div class="meta-item">
+      <label>CNPJ do Fornecedor</label>
+      <span>{{ contract.supplier.cnpj }}</span>
+    </div>
+    <div class="meta-item">
+      <label>Valor Total</label>
+      <span style="color: var(--brand); font-weight: bold;">R$ {{ contract.contract_value }}</span>
+    </div>
+  </div>
+
+  <div class="meta-grid" style="margin-top: 0;">
+    <div class="meta-item">
+      <label>Vigência inicial</label>
+      <span>{{ contract.start_date|date:"d/m/Y" }}</span>
+    </div>
+    <div class="meta-item">
+      <label>Término do Contrato</label>
+      <span>{{ contract.end_date|date:"d/m/Y" }}</span>
+    </div>
+  </div>
+
+  <h3>Objeto do Contrato</h3>
+  <div class="description-box">
+    {{ contract.description|linebreaks }}
+  </div>
+
+  <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+    {% if contract.document %}
+      <a href="{{ contract.document.url }}" class="btn" target="_blank">🗂️ Visualizar/Baixar Documento Anexo</a>
+    {% else %}
+      <span style="color: var(--text-muted); font-style: italic;">Nenhum documento físico anexado a este contrato.</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

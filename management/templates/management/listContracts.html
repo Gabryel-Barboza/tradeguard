@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+  <h2>Contratos Ativos</h2>
+</div>
+
+<table class="contracts-table">
+  <thead>
+    <tr>
+      <th>Número do Contrato</th>
+      <th>Fornecedor (Razão Social)</th>
+      <th>Valor</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for contract in contracts %}
+    <tr>
+      <td style="font-weight: bold; color: var(--brand);">{{ contract.contract_number }}</td>
+      <td>{{ contract.supplier.corporate_name }}</td>
+      <td>R$ {{ contract.contract_value }}</td>
+      <td>
+        <a href="{% url 'contract-detail' contract.pk %}" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Detalhes</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+        Nenhum contrato encontrado no sistema...
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

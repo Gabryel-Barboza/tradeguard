@@ -1,0 +1,48 @@
+services:
+  db:
+    container_name: postgres-db
+    image: postgres:18.3-bookworm
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/
+    networks:
+      - tradeguard-net
+    expose:
+      - 5432
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "psql -U ${POSTGRES_USER} -d ${POSTGRES_DB} -c 'SELECT 1'",
+          "|| exit 1",
+        ]
+      interval: 1m30s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
+
+  server:
+    container_name: django-server
+    build:
+      context: .
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    command: ["/bin/sh", "./start.sh"]
+    volumes:
+      - .:/app
+      - django-uploads:/app/media
+    networks:
+      - tradeguard-net
+    ports:
+      - 8080:8080
+
+networks:
+  tradeguard-net:
+
+volumes:
+  postgres-data:
+  django-uploads:
