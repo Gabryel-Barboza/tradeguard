@@ -2,10 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
-
 from .models import User
 
 # Register your models here.
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -16,7 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = User
-        fields = '__all__')
+        fields = '__all__'
 
 
 @admin.register(User)
@@ -31,3 +31,13 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username',)
 
     ordering = ('date_joined',)
+
+    add_fieldsets = (
+        (
+            'Novo Usuário',
+            {
+                'classes': ('wide'),
+                'fields': ('username', 'email', 'password1', 'password2'),
+            },
+        ),
+    )
